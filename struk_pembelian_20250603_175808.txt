@@ -1,0 +1,10 @@
+=== STRUK PEMBELIAN ===
+🍔 Burger x3 = Rp75,000
+---------------------------
+Total: Rp75,000
+Metode Bayar: Cash
+Uang Diterima: Rp100,000
+Uang Kembali: Rp25,000
+Waktu: 2025-06-03 17:58:08
+===========================
+Terima kasih! 🍽️
