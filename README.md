@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Voice-Based Fast Food Ordering System
 
 ## Deskripsi
@@ -53,3 +54,6 @@ Aplikasi ini adalah sistem pemesanan makanan cepat saji berbasis suara yang diba
 
 ## Lisensi
 Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+=======
+# FINAL_PROJECT_REAPYTHON1IQXHE
+>>>>>>> b534afd1e9ce584aa6b27c58a3711d59931a9cc6
