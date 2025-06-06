@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
-import numpy as np
+import torch
 import librosa
 import speech_recognition as sr
 from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
@@ -21,18 +21,27 @@ def recognize_speech_from_whisper(audio_file_path):
     try:
         # Membaca file audio dan mengonversi sampling rate ke 16kHz
         audio_input, sample_rate = librosa.load(audio_file_path, sr=16000)
-
+        
         # Menggunakan processor untuk memproses audio input
-        inputs = processor(audio_input, sampling_rate=16000, return_tensors="np")
-
+        inputs = processor(audio_input, sampling_rate=16000, return_tensors="pt")
+        
         # Melakukan inferensi dengan model Whisper
-        generated_ids = model.generate(inputs["input_features"])
-
+        with torch.no_grad():
+            # Use the correct key - typically 'input_features' for Whisper
+            if "input_features" in inputs:
+                generated_ids = model.generate(inputs["input_features"])
+            elif "input_values" in inputs:
+                generated_ids = model.generate(inputs["input_values"])
+            else:
+                # Fallback: use the first available tensor
+                first_key = list(inputs.keys())[0]
+                generated_ids = model.generate(inputs[first_key])
+        
         # Mendekodekan hasil inferensi menjadi teks
         transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-
+        
         return transcription
-
+        
     except Exception as e:
         st.error(f"Error in speech recognition: {str(e)}")
         return "Maaf, tidak dapat mengenali suara. Silakan coba lagi."
@@ -324,7 +333,7 @@ if st.session_state.stage == "ordering":
                         st.session_state.order.items.pop(idx)
                     else:
                         item['Jumlah'] = new_qty
-                        item['Subtotal'] = item['Harga'] * new_qty
+                        item['Subtotal'] = item['Harga'] * item['Jumlah']
                     st.rerun()
             
             with col4:
